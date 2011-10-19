@@ -1,0 +1,95 @@
+= beanqueue
+
+* http://github.com/GearHead90/beanqueue
+
+== DESCRIPTION:
+
+This is a replacement for gem 'stalker' with additions:
+
+1. jobs grouping
+2. jobs threading
+3. logging
+4. background run (as daemon)
+5. stalker makes to include full gem in application, but needed only client-side
+
+This is a client-side gem. For a worker you need
+
+* http://github.com/#{github_username}/beanworker
+
+== INSTALL:
+
+gem install beanqueue
+
+== CONFIGURATION:
+
+in regular app:
+
+    require 'beanqueue'    
+    Beanqueue.connect 'localhost:11300'
+
+for multiple servers:
+
+    Beanqueue.connect 'localhost:11300', '192.168.1.1:11300', '192.168.1.1:11301'
+
+in rails app just make config/beanstalk.yml:
+
+    host: localhost
+    port: 11300
+
+or for multiple servers:
+   
+    nodes:
+      - host: localhost
+        port: 11300
+
+      - host: 192.168.1.1
+        port: 11300
+
+      - host: 192.168.1.1
+        port: 11301
+
+you can load YAML from non-Rails app with:
+
+    Beanqueue.load './config/beanstalk.yml' # see next line about this
+
+== USAGE:
+
+    Beanqueue.push 'some.job', param1: 'val1', param2: 'val2'
+
+or with params:
+
+    Beanqueue.push 'some.job', 
+       { param1: 'val1', param2: 'val2' },
+       timeout: 60.seconds, # job will be re-put after this time of execution
+                            # default is 2.minutes
+       priority: 100,       # beanstalk inner priority
+                            # I prefer to use grouping instead
+       delay: 5,            # delay job queuing
+                            # default is 0
+       fork: true           # does job should be performed in fork
+                            # default is set in worker/job definition
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2011 Andrew Shaydurov
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
