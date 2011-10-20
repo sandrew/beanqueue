@@ -1,7 +1,7 @@
 require 'beanstalk-client'
 
 module Beanqueue
-  VERSION = '0.1.0'
+  VERSION = '0.1.1'
 
   class << self
     def get_params(yaml_path)
@@ -25,6 +25,6 @@ module Beanqueue
   end
 end
 
-if defined? Rails
-  Beanqueue.connect Beanqueue.get_params(Rails.root.join('config', 'beanstalk.yml'))
+if defined?(Rails)
+  require "beanqueue/railtie"
 end

@@ -3,3 +3,4 @@ Manifest.txt
 README.rdoc
 Rakefile
 lib/beanqueue.rb
+lib/beanqueue/railtie.rb
