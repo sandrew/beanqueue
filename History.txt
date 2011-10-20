@@ -1,3 +1,9 @@
+=== 0.1.0 2011-10-20
+
+* 2 minor enhancements:
+  * Some typos in README
+  * Changes in configuration API for compliance with Beanworker
+
 === 0.0.1 2011-10-19
 
 * 1 major enhancement:

@@ -1,20 +1,20 @@
 require 'beanstalk-client'
 
 module Beanqueue
-  VERSION = '0.0.1'
+  VERSION = '0.1.0'
 
   class << self
-    def load(yaml_path)
-      config = YAML::load(open(yaml_path))
-      if config['nodes']
-        connect *(config['nodes'].map { |node| "#{node['host']}:#{node['port']}" })
+    def get_params(yaml_path)
+      hash = YAML.load(open(yaml_path))
+      if hash['nodes']
+        hash['nodes'].map { |node| "#{node['host']}:#{node['port']}" }
       else
-        connect "#{config['host']}:#{config['port']}"
+        "#{hash['host']}:#{hash['port']}"
       end
-    end
+    end      
 
-    def connect(*nodes)
-      @connection = Beanstalk::Pool.new nodes.to_a
+    def connect(nodes)
+      @connection = Beanstalk::Pool.new(nodes.is_a?(Array) ? nodes : [nodes])
     end
 
     def push(name, args={}, opts={})
@@ -26,5 +26,5 @@ module Beanqueue
 end
 
 if defined? Rails
-  Beanqueue.load Rails.root.join('config', 'beanstalk.yml')
+  Beanqueue.connect Beanqueue.get_params(Rails.root.join('config', 'beanstalk.yml'))
 end

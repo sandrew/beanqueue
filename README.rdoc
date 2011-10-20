@@ -4,17 +4,17 @@
 
 == DESCRIPTION:
 
-This is a replacement for gem 'stalker' with additions:
+This is a beanstalk-based job-queueing-manager, replacement for gem 'stalker' with additions:
 
 1. jobs grouping
-2. jobs threading
+2. jobs threading and forking
 3. logging
 4. background run (as daemon)
 5. stalker makes to include full gem in application, but needed only client-side
 
 This is a client-side gem. For a worker you need
 
-* http://github.com/#{github_username}/beanworker
+* http://github.com/GearHead90/beanworker
 
 == INSTALL:
 
@@ -50,7 +50,7 @@ or for multiple servers:
 
 you can load YAML from non-Rails app with:
 
-    Beanqueue.load './config/beanstalk.yml' # see next line about this
+    Beanqueue.connect Beanqueue.get_params('./config/beanstalk.yml')
 
 == USAGE:
 
@@ -60,14 +60,18 @@ or with params:
 
     Beanqueue.push 'some.job', 
        { param1: 'val1', param2: 'val2' },
-       timeout: 60.seconds, # job will be re-put after this time of execution
-                            # default is 2.minutes
-       priority: 100,       # beanstalk inner priority
-                            # I prefer to use grouping instead
-       delay: 5,            # delay job queuing
-                            # default is 0
-       fork: true           # does job should be performed in fork
-                            # default is set in worker/job definition
+       timeout:  60.seconds,  # job will be re-put after this time of execution
+                              # default is 2.minutes
+
+       priority: 100,         # beanstalk inner priority, bigger - higher
+                              # default is 65536
+                              # I prefer to use grouping instead
+
+       delay:    5,           # delay job queuing
+                              # default is 0
+
+       fork:     true         # does job should be performed in fork
+                              # default is set in worker/job definition
 
 == LICENSE:
 

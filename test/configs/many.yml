@@ -1,3 +1,6 @@
 nodes:
   - host: localhost
     port: 11300
+
+  - host: 192.168.1.1
+    port: 11301
