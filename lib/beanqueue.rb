@@ -1,7 +1,7 @@
 require 'beanstalk-client'
 
 module Beanqueue
-  VERSION = '0.1.1'
+  VERSION = '0.1.2'
 
   class << self
     def get_params(yaml_path)
@@ -19,7 +19,7 @@ module Beanqueue
 
     def push(name, args={}, opts={})
       args['__fork__'] = opts[:fork] if opts[:fork]
-      @connection.use name
+      @connection.use name.to_s.gsub('_', '.')
       @connection.yput args, (opts[:priority] || 65536), [0, opts[:delay].to_i].max, (opts[:timeout] || 120)
     end
   end

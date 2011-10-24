@@ -1,3 +1,8 @@
+=== 0.1.2 2011-10-24
+
+* 1 minor enhancement:
+  * Symbol job names allowed
+
 === 0.1.1 2011-10-20
 
 * 1 minor enhancement:
